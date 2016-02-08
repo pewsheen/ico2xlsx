@@ -9,6 +9,40 @@ def rgb2hex(r, g, b, a):
 		r = g = b = 255;
 	return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
+def createXlsx(xlsxPath):
+	workbook = xlsxwriter.Workbook(xlsxPath)
+	worksheet = workbook.add_worksheet()
+
+	return workbook, worksheet
+
+def loadICO(imgPath):
+	try:
+		img = Image.open(imgPath)
+	except (NameError, AttributeError) as e:
+		print '[Error] ICO path is not correct'
+		exit()
+
+	print "Image type: " + img.format
+	print "Image mode: " + img.mode
+	print "Image size: " + str(img.size)
+
+	if img.format != 'ICO' and img.format != 'PNG':
+		print imgPath + ' is not a valid path.'
+		exit()
+
+	return img, img.size
+
+def convert(width, height, pixels, workbook, worksheet):
+	for y in range(height):
+		for x in range(width):
+			r, g, b, a = pixels[x, y]
+
+			format = workbook.add_format()
+			format.set_pattern(1)  # This is optional when using a solid fill.
+			format.set_bg_color(rgb2hex(r, g, b, a))
+			worksheet.write(y, x, '', format)
+			print 'x = %s, y = %s, RGBA = %s,%s,%s,%s , hex = %s' % (x, y, r, g, b, a, rgb2hex(r, g, b, a))
+
 # Open ICO
 ICO_Path = raw_input('Enter the path of ICO >> ')
 
@@ -16,44 +50,21 @@ if ICO_Path == '':
 	print '[Error] ICO path is empty.'
 	exit()
 
-try:
-	icon = Image.open(ICO_Path)
-except (NameError, AttributeError) as e:
-	print '[Error] ICO path is not correct'
-
-print "Image type: " + icon.format
-print "Image mode: " + icon.mode
-print "Image size: " + str(icon.size)
-
-if icon.format != 'ICO' and icon.format != 'PNG':
-	print ICO_Path + ' is not a .ICO file.'
-	exit()
-
+icon, (width, height) = loadICO(ICO_Path)
 pixels = icon.convert('RGBA').load()
-width, height = icon.size
 
-# Create xlsx File and Fill Colors
+# Create xlsx File
 print 'Creating xlsx file...'
-workbook = xlsxwriter.Workbook('hello.xlsx')
-worksheet = workbook.add_worksheet()
+workbook, worksheet = createXlsx('hello.xlsx')
 
 # Set column width to make it square
 worksheet.set_column(0, width-1, 1.9)
 
 # Convert ICO to HEX and Fill Cells
 print 'Converting...'
-for y in range(height):
-	for x in range(width):
-		r, g, b, a = pixels[x, y]
-
-		format = workbook.add_format()
-		format.set_pattern(1)  # This is optional when using a solid fill.
-		format.set_bg_color(rgb2hex(r, g, b, a))
-		worksheet.write(y, x, '', format)
-
-		print 'x = %s, y = %s, RGBA = %s,%s,%s,%s , hex = %s' % (x, y, r, g, b, a, rgb2hex(r, g, b, a))
+convert(width, height, pixels, workbook, worksheet)
 
 # Finish up
 workbook.close()
-print 'Done!'
 
+print 'Done!'
