@@ -8,6 +8,7 @@ Convert ICO to XLSX (Excel or something something)
 - Python 2.7
 - PIL
 - [XlsxWriter](https://github.com/jmcnamara/XlsxWriter)
+- (For Windows) You need administator privilege 
 
 ## How to use? -- GUI
 1. `python ico2xlsx_ui.py`
