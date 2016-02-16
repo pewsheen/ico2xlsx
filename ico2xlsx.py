@@ -128,7 +128,7 @@ if __name__ == '__main__':
 
 	# Create xlsx File
 	print 'Creating xlsx file...'
-	workbook, worksheet = createXlsx('hello.xlsx')
+	workbook, worksheet = createXlsx('favicon.xlsx')
 
 	# Set column width to make it square
 	worksheet.set_column(0, width-1, 2.4)
