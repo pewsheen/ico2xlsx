@@ -7,8 +7,11 @@ from tkFileDialog import askopenfilename
 # Func Descripion: Convert RGB to HEX
 #
 def rgb2hex(r, g, b, a):
+
+	# Some transparent pixel reads RGBA:0,0,0,0
 	if a == 0:
 		r = g = b = 255;
+
 	return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
 def createXlsx(xlsxPath):
@@ -56,7 +59,7 @@ class GUIDemo(Frame):
 		Frame.__init__(self, master)
 		self.grid()
 		self.createWidgets()
- 
+
 	def createWidgets(self):
 		self.inputText = Label(self)
 		self.inputText["text"] = "ICO Path:"
@@ -64,32 +67,33 @@ class GUIDemo(Frame):
 		self.inputField = Entry(self)
 		self.inputField["width"] = 50
 		self.inputField.grid(row=0, column=1, columnspan=6)
- 
+
 		# self.outputText = Label(self)
 		# self.outputText["text"] = "Output:"
 		# self.outputText.grid(row=1, column=0)
 		# self.outputField = Entry(self)
 		# self.outputField["width"] = 50
 		# self.outputField.grid(row=1, column=1, columnspan=6)
-		 
+
 		self.load = Button(self)
 		self.load["text"] = "Load"
 		self.load.grid(row=2, column=5)
 		self.load["command"] =  self.loadMethod
-		
+
 		self.convert = Button(self)
 		self.convert["text"] = "Convert"
 		self.convert.grid(row=2, column=6)
 		self.convert["command"] =  self.convertMethod
- 
+
 		self.displayText = Label(self)
 		self.displayText["text"] = ""
 		self.displayText.grid(row=3, column=0, columnspan=7)
-	  
+
 	def loadMethod(self):
 		self.imgPath = askopenfilename()
-		self.inputField.insert(END, self.imgPath) 
- 
+		self.inputField.delete(0, 'end')
+		self.inputField.insert(END, self.imgPath)
+
 	def convertMethod(self):
 		self.imgPath = self.inputField.get()
 		print 'imgPath = ' + self.imgPath
@@ -123,7 +127,7 @@ class GUIDemo(Frame):
 		# exit()
 
 if __name__ == '__main__':
-	
+
 	# Open ICO
 	root = Tk()
 	root.title("ico2xlsx Converter")
