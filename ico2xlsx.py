@@ -103,7 +103,7 @@ def load_icon(imgPath, index=None):
 			# Load AND bitmap
 			file.seek(offset)
 			string = file.read(size)
-			mask = Image.fromstring('1', image.size, string, 'raw',
+			mask = Image.frombytes('1', image.size, string, 'raw',
 									('1;I', stride, -1))
 
 			image = image.convert('RGBA')
