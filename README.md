@@ -20,3 +20,6 @@ Convert ICO to XLSX (Excel or something something)
 1. `python ico2xlsx.py`
 2. Enter ICO file path
 3. Done!
+
+## Noted
+1. It's not totaly square, you need to adjust youself.
